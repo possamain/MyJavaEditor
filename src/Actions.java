@@ -3,13 +3,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javax.swing.ActionMap;
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultEditorKit;
+
+import javafx.stage.FileChooser.ExtensionFilter;
 
 public class Actions {
 	private static Moduli moduli;
@@ -22,6 +32,7 @@ public class Actions {
 	
 	public static void setCourrentFile(String courrentFile) {
 		//boolean find = false;
+		
 		//TODO controllare chiamate per capire cosa fa, non lo ricordo Lel
 		/*while(!moduli.gui.files.get(moduli.gui.tabbedPane.getSelectedIndex()).equals(courrentFile))
 			
@@ -35,6 +46,9 @@ public class Actions {
 		Actions.moduli = moduli;
 		dialog = new JFileChooser();
 		System.out.println("MANCANO DELLE COSEEEE!!!/n controlla TODO");
+		System.out.println("controllare cambio nomi interni al prg dopo salvataggi!!!");
+		System.out.println("inserizi CTRL+Z, CTRL+X");
+		System.out.println("estensioni in apertura files");
 	}
 	
 	ActionListener New = new ActionListener() {		
@@ -45,10 +59,11 @@ public class Actions {
 			 */
 			//boolean sameName = false;
 			
-			//int index = moduli.gui.textAreas.length+1;
-			/*LISTE*/
-			moduli.gui.getTextAreas().add(new JTextArea());
-			moduli.gui.getFiles().add(new File("Untitled"));
+			String nomeNuovoFile = JOptionPane.showInputDialog("Nome file");
+			
+			
+			moduli.gui.getTextAreas().add(new JEditorPane());
+			moduli.gui.getFiles().add(new File(nomeNuovoFile));
 			
 			moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).setFont(new Font("Monospaced", Font.PLAIN, 12));
 			moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).setVisible(true);
@@ -58,15 +73,26 @@ public class Actions {
 					moduli.gui.getBtnSave().setEnabled(true);
 					moduli.gui.getMntmSalva().setEnabled(true);
 				}
-			});			
-			for(int i = 0; i<moduli.gui.getTabbedPane().getTabCount(); i++)
-				if(moduli.gui.getTabbedPane().getTitleAt(i)==moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getName()&&moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getName()!="Untitled")
-					moduli.sameName = true;
-			if(moduli.sameName)
-				moduli.gui.getTabbedPane().addTab(moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getName()+" - "+moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getPath(), null, moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1), null);
+			});		
+			
+			moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).setText("public class "+nomeNuovoFile.substring(0, nomeNuovoFile.length()-5)+"{\n\tpublic static void main(String[] args){\n\n\t}\n}");
+			
+			if(moduli.gui.getTabbedPane().getTabCount()>=1){
+				for(int i = 0; i<moduli.gui.getTabbedPane().getTabCount(); i++)
+					if(moduli.gui.getTabbedPane().getTitleAt(i)==moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getName()&&moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getName()!="Untitled"){
+						moduli.gui.getTabbedPane().addTab(moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getName()+" - "+moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getPath(), null, moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1), null);
+						moduli.sameName = true;
+					}
+				if(moduli.sameName)
+					moduli.gui.getTabbedPane().addTab(moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getName()+" - "+moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getPath(), null, moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1), null);
+				else {
+					moduli.gui.getTabbedPane().addTab(moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getName(), null, moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1), null);
+				}
+			}
 			else {
 				moduli.gui.getTabbedPane().addTab(moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getName(), null, moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1), null);
 			}
+			
 			//moduli.gui.mntmSalva.setEnabled(true);
 			moduli.gui.getMntmSalvaConNome().setEnabled(true);
 		}
@@ -78,9 +104,11 @@ public class Actions {
 		public void actionPerformed(ActionEvent arg0) {
 			 moduli.saveOld();
 			 dialog.setDialogTitle("Apri");
+			 //PENEdialog.setFileFilter(new FileNameExtensionFilter("JavaFiles (.java)", new ExtensionFilter(null, new))); 
 			 if(dialog.showOpenDialog(null)==JFileChooser.APPROVE_OPTION){
 				 moduli.readInFile(dialog.getSelectedFile().getAbsolutePath());
 			 }
+			 
 			 moduli.gui.getMntmSalva().setEnabled(true);
 			 moduli.gui.getMntmSalvaConNome().setEnabled(true);
 		 }
@@ -113,41 +141,89 @@ public class Actions {
 		}
 	};
 	
-	ActionListener openCmd = new ActionListener() {
-		
+	ActionListener Cut = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			/*try{
-				System.out.println("CIao");
-				//Runtime r = Runtime.getRuntime();
-				//String s [] = new String [3];
-				try{
-					//Runtime r = Runtime.getRuntime();
-					String s [] = new String [3];
-					s[0] = "cmd.exe";
-					s[1] = "/C";
-					s[2] = moduli.gui.files.get(moduli.gui.tabbedPane.getSelectedIndex()).getAbsolutePath();
-					new ProcessBuilder(s[0],s[1],s[2]).start();
-				}catch(Throwable t){
-					t.printStackTrace();
+			moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex()).cut();
+		}
+	};
+	
+	ActionListener Copy = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex()).copy();
+		}
+	};
+	
+	ActionListener Paste = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex()).paste();
+		}
+	};
+	
+	ActionListener SelectAll = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex()).selectAll();;
+		}
+	};
+		
+	ActionListener openCmd = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			new RunCMD(moduli.gui.getFiles().get(moduli.gui.getTabbedPane().getSelectedIndex()));
+		}
+	};
+	
+	KeyListener paroleChiave = new KeyListener() {
+		
+		@Override
+		public void keyTyped(KeyEvent e) {
+			String line;
+			String [] paroleRiservate = new String[48];
+			String [] parole = moduli.getWords(moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex()).getText());
+			FileReader fr;
+			BufferedReader br;
+			try {
+				fr = new FileReader("ParoleRiservate");
+				br = new BufferedReader(fr);
+				int i = 0;
+				while ((line = br.readLine()) != null){
+					paroleRiservate[i] = line;
+					i++;
 				}
+				fr.close();
+				moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex()).setText("");
+				for (i = 0; i<paroleRiservate.length; i++)
+					for (int j = 0; j<parole.length; j++)
+						if (paroleRiservate[i] == parole[j])
+							
+							moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex()).getCsetText(parole[j]);
 				
-			}catch(Throwable t){
-				t.printStackTrace();
-			}*/
-			System.out.println("--> CMD: il codice fa qualcosa (loop), sistemare classe RunnableHelper.java");
-			System.out.println("152\tButton btnCmd.addActionListener(actions.openCmd)\n147\t\tActions.openCmd - (actionPerformed)");
-			/*RunnableHelper h = new RunnableHelper();
-			h.runFile("cmd.exe");*/
+					
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}
+		
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void keyPressed(KeyEvent e) {
+			// TODO Auto-generated method stub
 			
 		}
 	};
 	
-	//TODO funzioni Taglia, Copia, Incolla, ..., su textAreas
-	//ActionMap m = moduli.gui.textArea.getActionMap();
-	/*Action Cut = m.get(DefaultEditorKit.cutAction);
-	Action Copy = m.get(DefaultEditorKit.copyAction);
-	Action Paste = m.get(DefaultEditorKit.pasteAction);*/
-
+	
+	
+	
 
 }

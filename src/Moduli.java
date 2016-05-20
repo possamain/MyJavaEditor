@@ -2,12 +2,20 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.StringTokenizer;
+
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+
+import javafx.print.Collation;
 
 public class Moduli {
 	
@@ -17,7 +25,7 @@ public class Moduli {
 	
 	
 	public Moduli(GUI gui) {
-		System.out.println("creare metodo getLibero per files e textAreas");
+		//System.out.println("creare metodo getLibero per files e textAreas");
 		this.gui = gui;
 		dialog = new JFileChooser();
 	}
@@ -37,7 +45,9 @@ public class Moduli {
 	void readInFile(String fileName){
 		try{
 			FileReader r = new FileReader(fileName);
-			gui.getTextAreas().add(new JTextArea());
+			gui.getTextAreas().add(new JEditorPane());
+			gui.getFiles().add(new File(fileName));
+			
 			gui.getTextAreas().get(gui.getTextAreas().size()-1).setFont(new Font("Monospaced", Font.PLAIN, 12));
 			gui.getTextAreas().get(gui.getTextAreas().size()-1).setVisible(true);
 			gui.getTextAreas().get(gui.getTextAreas().size()-1).addKeyListener(new KeyAdapter() {
@@ -59,13 +69,22 @@ public class Moduli {
 			gui.getMntmSalvaConNome().setEnabled(true);
 			gui.getTextAreas().get(gui.getTextAreas().size()-1).read(r, null);
 			r.close();
-			Actions.setCourrentFile(fileName);
+			//Actions.setCourrentFile(fileName);
 			gui.getTabbedPane().setTitleAt(gui.getTabbedPane().getSelectedIndex(), gui.getFiles().get(gui.getTabbedPane().getSelectedIndex()).getName());
 			gui.setChanged(false);
 		}catch(IOException e){
 			Toolkit.getDefaultToolkit().beep();
-			JOptionPane.showMessageDialog(null, "File " + fileName + "non trovato!");
+			JOptionPane.showMessageDialog(null, "File " + fileName + " non trovato!");
 		}
+	}
+	
+	String[] getWords (String text){
+		StringTokenizer st = new StringTokenizer(text);
+		String[] words = new String[st.countTokens()];
+		int i = 0;
+		while (st.hasMoreTokens()) 
+			words[i] = st.nextToken();
+		return words;
 	}
 	
 	void saveFile(String fileName) {
@@ -79,6 +98,11 @@ public class Moduli {
 			gui.getBtnSave().setEnabled(false);
 			gui.getMntmSalva().setEnabled(false);
 			gui.getTabbedPane().setTitleAt(gui.getTabbedPane().getSelectedIndex(), fileName);
+			gui.getFiles().get(gui.getTabbedPane().getSelectedIndex()).renameTo(new File(fileName));
+			System.out.println(gui.getFiles().get(gui.getTabbedPane().getSelectedIndex()).getName());
+			//gui.getFiles().get(gui.getTabbedPane().getSelectedIndex()).renameTo(new File(fileName));
+			//gui.getFiles().get(gui.getTabbedPane().getSelectedIndex()).
+			
 		}
 		catch(IOException e){
 			e.printStackTrace();

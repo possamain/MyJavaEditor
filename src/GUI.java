@@ -10,10 +10,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
-
+import javax.swing.text.DefaultEditorKit;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
@@ -37,7 +38,7 @@ public class GUI extends JFrame{
 	private static final long serialVersionUID = 1L;
 
 	private java.util.List<File> files;
-	private java.util.List<JTextArea> textAreas;
+	private java.util.List<JEditorPane> editorPanes;
 	
 	private JPanel panel;
 	private JMenuBar menuBar;
@@ -47,6 +48,9 @@ public class GUI extends JFrame{
 	private JMenuItem mntmSalva;
 	private JMenuItem mntmSalvaConNome;
 	private JMenuItem mntmEsci;
+	private JMenuItem mntmCopia;
+	private JMenuItem mntmTaglia;
+	private JMenuItem mntmIncolla;
 	private JMenu mnModifica;
 	private JMenuItem mntmNewMenuItem;
 	private JMenuItem mntmSelezionaTutto;
@@ -84,14 +88,15 @@ public class GUI extends JFrame{
 		mntmApri.addActionListener(actions.Open);
 		mnFile.add(mntmApri);
 		
-		setMntmSalva(new JMenuItem("Salva"));
-		getMntmSalva().addActionListener(actions.Save);
-		getMntmSalva().setEnabled(false);
+		mntmSalva = new JMenuItem("Salva");
+		mntmSalva.addActionListener(actions.Save);
+		mntmSalva.setEnabled(false);
+		mntmSalva.setMnemonic(KeyEvent.VK_S);
 		mnFile.add(getMntmSalva());
 		
-		setMntmSalvaConNome(new JMenuItem("Salva con nome"));
-		getMntmSalvaConNome().addActionListener(actions.SaveAs);
-		getMntmSalvaConNome().setEnabled(false);
+		mntmSalvaConNome = new JMenuItem("Salva con nome");
+		mntmSalvaConNome.addActionListener(actions.SaveAs);
+		mntmSalvaConNome.setEnabled(false);
 		mnFile.add(getMntmSalvaConNome());
 		
 		mntmEsci = new JMenuItem("Esci");
@@ -104,12 +109,18 @@ public class GUI extends JFrame{
 		menuBar.add(mnModifica_1);
 		
 		mntmTaglia = new JMenuItem("Taglia");
+		mntmTaglia.addActionListener(actions.Cut);
+		mntmTaglia.setMnemonic(KeyEvent.VK_X);
 		mnModifica_1.add(mntmTaglia);
 		
 		mntmCopia = new JMenuItem("Copia");
+		mntmCopia.addActionListener(actions.Copy);
+		mntmCopia.setMnemonic(KeyEvent.VK_C);
 		mnModifica_1.add(mntmCopia);
 		
 		mntmIncolla = new JMenuItem("Incolla");
+		mntmIncolla.setMnemonic(KeyEvent.VK_V);
+		mntmIncolla.addActionListener(actions.Paste);
 		mnModifica_1.add(mntmIncolla);
 		
 		mntmSelezionaTutto_1 = new JMenuItem("Seleziona tutto");
@@ -166,7 +177,7 @@ public class GUI extends JFrame{
 		lblVersion.setBounds(15, 415, 274, 25);
 		panel.add(lblVersion);
 		
-		setTextAreas(new ArrayList<JTextArea>());
+		setTextAreas(new ArrayList<JEditorPane>());
 		/*textAreas[0]= new JTextArea();
 		textAreas[0].setFont(new Font("Monospaced", Font.PLAIN, 12));
 		textAreas[0].setVisible(false);
@@ -178,12 +189,14 @@ public class GUI extends JFrame{
 			}
 		});
 		//textArea.*/
+		//tabbedPane.getSelectedIndex()
+		//textAreas.get(tabbedPane.getSelectedIndex()).paste();
 		
 		setFiles(new ArrayList<File>());
 		
 	}
 	
-	public JTextArea getTextArea() {
+	public JEditorPane getTextArea() {
 		return getTextAreas().get(getTabbedPane().getSelectedIndex());
 	}
 
@@ -204,12 +217,12 @@ public class GUI extends JFrame{
 		this.files = files;
 	}
 
-	public java.util.List<JTextArea> getTextAreas() {
-		return textAreas;
+	public java.util.List<JEditorPane> getTextAreas() {
+		return editorPanes;
 	}
 
-	public void setTextAreas(java.util.List<JTextArea> textAreas) {
-		this.textAreas = textAreas;
+	public void setTextAreas(java.util.List<JEditorPane> editorPanes) {
+		this.editorPanes = editorPanes;
 	}
 
 	public JMenu getMnModifica() {
@@ -267,11 +280,10 @@ public class GUI extends JFrame{
 	public void setMntmSalvaConNome(JMenuItem mntmSalvaConNome) {
 		this.mntmSalvaConNome = mntmSalvaConNome;
 	}
-
+	
 	Moduli moduli = new Moduli(this);
 	Actions actions = new Actions(moduli);
+	
 	private JMenuItem mntmSelezionaTutto_1;
-	private JMenuItem mntmCopia;
-	private JMenuItem mntmTaglia;
-	private JMenuItem mntmIncolla;
+	
 }
