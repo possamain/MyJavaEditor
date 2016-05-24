@@ -18,7 +18,7 @@ public class RunCMD {
 						
 			//pressKey("ALT+TAB");
 			cmdCommand = "cd ";
-			cmdCommand += file.getPath();
+			cmdCommand += file.getParent();
 			System.out.println(cmdCommand);
 			
 			for (int i = 0; i < cmdCommand.length(); i++)

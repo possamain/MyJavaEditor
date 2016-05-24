@@ -59,7 +59,7 @@ public class Actions {
 			moduli.gui.getTextAreas().add(new JTextPane());
 			moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).addKeyListener(colorWords);                                                                 
 			
-			moduli.gui.getTextFont().add(new Font("Monaco", Font.BOLD, 12));
+			moduli.gui.getTextFont().add(new Font("Monospaced", Font.BOLD, 12));
 			//System.out.println(moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1));
 			//moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex())
 			moduli.gui.getDoc().add(moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).getStyledDocument());
@@ -109,7 +109,7 @@ public class Actions {
 		public void actionPerformed(ActionEvent arg0) {
 			 moduli.saveOld();
 			 dialog.setDialogTitle("Apri");
-			 //PENEdialog.setFileFilter(new FileNameExtensionFilter("JavaFiles (.java)", new ExtensionFilter(null, new))); 
+			 //dialog.setFileFilter(new FileNameExtensionFilter("JavaFiles (.java)", new ExtensionFilter(null, new))); 
 			 if(dialog.showOpenDialog(null)==JFileChooser.APPROVE_OPTION){
 				 moduli.readInFile(dialog.getSelectedFile().getAbsolutePath());
 			 }

@@ -47,13 +47,7 @@ public class Moduli {
 			
 			gui.getTextAreas().get(gui.getTextAreas().size()-1).setFont(new Font("Monospaced", Font.PLAIN, 12));
 			gui.getTextAreas().get(gui.getTextAreas().size()-1).setVisible(true);
-			gui.getTextAreas().get(gui.getTextAreas().size()-1).addKeyListener(new KeyAdapter() {
-				public void keyPressed(KeyEvent e) {		
-					gui.setChanged(true);
-					gui.getBtnSave().setEnabled(true);
-					gui.getMntmSalva().setEnabled(true);
-				}
-			});			
+			gui.getTextAreas().get(gui.getTextAreas().size()-1).addKeyListener(gui.actions.colorWords);			
 			for(int i = 0; i<gui.getTabbedPane().getTabCount(); i++)
 				if(gui.getTabbedPane().getTitleAt(i)== fileName)
 					sameName = true;
@@ -79,8 +73,10 @@ public class Moduli {
 		StringTokenizer st = new StringTokenizer(text);
 		String[] words = new String[st.countTokens()];
 		int i = 0;
-		while (st.hasMoreTokens()) 
+		while (st.hasMoreTokens()) {
 			words[i] = st.nextToken();
+			i++;
+		}
 		return words;
 	}
 	
