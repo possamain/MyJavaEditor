@@ -1,33 +1,19 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import java.awt.Event;
 import java.awt.Font;
-import java.awt.List;
-
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
-import javax.swing.text.DefaultEditorKit;
-import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.StyledDocument;
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
-
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
-import java.io.IOException;
-import java.sql.Savepoint;
 import java.util.ArrayList;
-import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JLabel;
 
@@ -38,7 +24,10 @@ public class GUI extends JFrame{
 	private static final long serialVersionUID = 1L;
 
 	private java.util.List<File> files;
-	private java.util.List<JEditorPane> editorPanes;
+	private java.util.List<JTextPane> textPanes;
+	private java.util.List<StyledDocument> doc;
+	private java.util.List<Font> font;
+	private java.util.List<MutableAttributeSet> attrs;
 	
 	private JPanel panel;
 	private JMenuBar menuBar;
@@ -177,7 +166,7 @@ public class GUI extends JFrame{
 		lblVersion.setBounds(15, 415, 274, 25);
 		panel.add(lblVersion);
 		
-		setTextAreas(new ArrayList<JEditorPane>());
+		
 		/*textAreas[0]= new JTextArea();
 		textAreas[0].setFont(new Font("Monospaced", Font.PLAIN, 12));
 		textAreas[0].setVisible(false);
@@ -192,11 +181,18 @@ public class GUI extends JFrame{
 		//tabbedPane.getSelectedIndex()
 		//textAreas.get(tabbedPane.getSelectedIndex()).paste();
 		
+		/*for(int i = 0; i<textPanes.size(); i++){
+			textPanes.get(i).addKeyListener(actions.colorWords);
+		}*/
+		
 		setFiles(new ArrayList<File>());
+		setTextAreas(new ArrayList<JTextPane>());
+		setAttrs(new ArrayList<MutableAttributeSet>());
+		setDoc(new ArrayList<StyledDocument>());
+		setTextFont(new ArrayList<Font>());
 		
 	}
-	
-	public JEditorPane getTextArea() {
+	public JTextPane getActiveTextArea() {
 		return getTextAreas().get(getTabbedPane().getSelectedIndex());
 	}
 
@@ -217,12 +213,12 @@ public class GUI extends JFrame{
 		this.files = files;
 	}
 
-	public java.util.List<JEditorPane> getTextAreas() {
-		return editorPanes;
+	public java.util.List<JTextPane> getTextAreas() {
+		return textPanes;
 	}
 
-	public void setTextAreas(java.util.List<JEditorPane> editorPanes) {
-		this.editorPanes = editorPanes;
+	public void setTextAreas(ArrayList<JTextPane> arrayList) {
+		this.textPanes = arrayList;
 	}
 
 	public JMenu getMnModifica() {
@@ -281,6 +277,30 @@ public class GUI extends JFrame{
 		this.mntmSalvaConNome = mntmSalvaConNome;
 	}
 	
+	public java.util.List<StyledDocument> getDoc() {
+		return doc;
+	}
+
+	public void setDoc(java.util.List<StyledDocument> doc) {
+		this.doc = doc;
+	}
+
+	public java.util.List<Font> getTextFont() {
+		return font;
+	}
+
+	public void setTextFont(java.util.List<Font> font) {
+		this.font = font;
+	}
+
+	public java.util.List<MutableAttributeSet> getAttrs() {
+		return attrs;
+	}
+
+	public void setAttrs(java.util.List<MutableAttributeSet> attrs) {
+		this.attrs = attrs;
+	}
+
 	Moduli moduli = new Moduli(this);
 	Actions actions = new Actions(moduli);
 	

@@ -1,25 +1,19 @@
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import javax.swing.ActionMap;
-import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.DefaultEditorKit;
+import javax.swing.JTextPane;
+import javax.swing.text.StyleConstants;
 
-import javafx.stage.FileChooser.ExtensionFilter;
 
 public class Actions {
 	private static Moduli moduli;
@@ -59,23 +53,34 @@ public class Actions {
 			 */
 			//boolean sameName = false;
 			
-			String nomeNuovoFile = JOptionPane.showInputDialog("Nome file");
+			//String nomeNuovoFile = JOptionPane.showInputDialog("Nome file");
+			moduli.gui.getFiles().add(new File("Untitled"));
 			
+			moduli.gui.getTextAreas().add(new JTextPane());
+			moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).addKeyListener(colorWords);                                                                 
 			
-			moduli.gui.getTextAreas().add(new JEditorPane());
-			moduli.gui.getFiles().add(new File(nomeNuovoFile));
+			moduli.gui.getTextFont().add(new Font("Monaco", Font.BOLD, 12));
+			//System.out.println(moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1));
+			//moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex())
+			moduli.gui.getDoc().add(moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).getStyledDocument());
+			//doc = textPane.getStyledDocument();
+			moduli.gui.getAttrs().add(moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).getInputAttributes());
+			//MutableAttributeSet attrs = textPane.getInputAttributes();
+			StyleConstants.setAlignment(moduli.gui.getAttrs().get(moduli.gui.getAttrs().size()-1), StyleConstants.ALIGN_LEFT);
+			moduli.gui.getDoc().get(moduli.gui.getDoc().size()-1).setParagraphAttributes(0, 0, moduli.gui.getAttrs().get(moduli.gui.getDoc().size()-1), true);
 			
-			moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).setFont(new Font("Monospaced", Font.PLAIN, 12));
-			moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).setVisible(true);
-			moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).addKeyListener(new KeyAdapter() {
-				public void keyPressed(KeyEvent e) {		
-					moduli.gui.setChanged(true);
-					moduli.gui.getBtnSave().setEnabled(true);
-					moduli.gui.getMntmSalva().setEnabled(true);
-				}
-			});		
+			StyleConstants.setFontFamily(moduli.gui.getAttrs().get(moduli.gui.getAttrs().size()-1), moduli.gui.getTextFont().get(moduli.gui.getDoc().size()-1).getFamily());
+			StyleConstants.setFontSize(moduli.gui.getAttrs().get(moduli.gui.getAttrs().size()-1), moduli.gui.getTextFont().get(moduli.gui.getDoc().size()-1).getSize());
+			StyleConstants.setBold(moduli.gui.getAttrs().get(moduli.gui.getAttrs().size()-1), true);
+			StyleConstants.setForeground(moduli.gui.getAttrs().get(moduli.gui.getAttrs().size()-1), Color.black);
+
+			moduli.gui.getDoc().get(moduli.gui.getDoc().size()-1).setCharacterAttributes(0, moduli.gui.getDoc().get(moduli.gui.getDoc().size()-1).getLength() + 1, moduli.gui.getAttrs().get(moduli.gui.getDoc().size()-1), false);
+			//doc.setCharacterAttributes(0, doc.getLength() + 1, attrs, false);
 			
-			moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).setText("public class "+nomeNuovoFile.substring(0, nomeNuovoFile.length()-5)+"{\n\tpublic static void main(String[] args){\n\n\t}\n}");
+			//moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).setFont(new Font("Monospaced", Font.PLAIN, 12));
+			//moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).setVisible(true);
+			
+			//moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).setText("public class "+nomeNuovoFile.substring(0, nomeNuovoFile.length()-5)+"{\n\tpublic static void main(String[] args){\n\n\t}\n}");
 			
 			if(moduli.gui.getTabbedPane().getTabCount()>=1){
 				for(int i = 0; i<moduli.gui.getTabbedPane().getTabCount(); i++)
@@ -197,9 +202,9 @@ public class Actions {
 				moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex()).setText("");
 				for (i = 0; i<paroleRiservate.length; i++)
 					for (int j = 0; j<parole.length; j++)
-						if (paroleRiservate[i] == parole[j])
+						if (paroleRiservate[i] == parole[j]){}
 							
-							moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex()).getCsetText(parole[j]);
+							//moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex()).getCsetText(parole[j]);
 				
 					
 			} catch (IOException e1) {
@@ -218,6 +223,52 @@ public class Actions {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			// TODO Auto-generated method stub
+			
+		}
+	};
+	
+	KeyListener colorWords = new KeyListener() {
+		
+		@Override
+		public void keyTyped(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void keyReleased(KeyEvent ev) {
+			if (ev.getID() == KeyEvent.KEY_RELEASED && ev.getSource() == moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex())) {
+				/*
+				 * while che passa ogni parola riservata del file allegato 
+				 * al progetto al modulo colorWords()
+				 */
+				String parola;
+				try {
+					FileReader fr = new FileReader("ParoleRiservate");
+					BufferedReader br = new BufferedReader(fr);
+					parola = br.readLine();
+					while(parola != null){
+						//System.out.println(parola);	
+						moduli.colorWords(parola);
+						parola = br.readLine();
+					}
+					br.close();
+					fr.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+			}
+		}// keyReleased
+			
+		
+		@Override
+		public void keyPressed(KeyEvent e) {
+			moduli.gui.setChanged(true);
+			moduli.gui.getBtnSave().setEnabled(true);
+			moduli.gui.getMntmSalva().setEnabled(true);
 			
 		}
 	};

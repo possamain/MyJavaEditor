@@ -2,8 +2,6 @@ import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
-import com.sun.glass.ui.Window;
-
 public class RunCMD {
 	private static Robot r;
 

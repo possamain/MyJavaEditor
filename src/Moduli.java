@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
@@ -6,16 +7,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.StringTokenizer;
-
-import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-
-import javafx.print.Collation;
+import javax.swing.JTextPane;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.StyleConstants;
 
 public class Moduli {
 	
@@ -45,7 +42,7 @@ public class Moduli {
 	void readInFile(String fileName){
 		try{
 			FileReader r = new FileReader(fileName);
-			gui.getTextAreas().add(new JEditorPane());
+			gui.getTextAreas().add(new JTextPane());
 			gui.getFiles().add(new File(fileName));
 			
 			gui.getTextAreas().get(gui.getTextAreas().size()-1).setFont(new Font("Monospaced", Font.PLAIN, 12));
@@ -87,10 +84,28 @@ public class Moduli {
 		return words;
 	}
 	
+	void colorWords (String parola){
+		System.out.println(parola);
+		String tmp = gui.getTextAreas().get(gui.getTabbedPane().getSelectedIndex()).getText();
+		//int i = 0;
+		MutableAttributeSet attrs = gui.getTextAreas().get(gui.getTabbedPane().getSelectedIndex()).getInputAttributes();
+		int i = tmp.indexOf(parola);
+		//System.out.println(i);
+		while (i != -1) {
+			StyleConstants.setForeground(attrs, Color.blue);
+			gui.getDoc().get(gui.getTabbedPane().getSelectedIndex()).setCharacterAttributes(i, i + parola.length(), attrs, false);
+			StyleConstants.setForeground(attrs, Color.black);
+			gui.getDoc().get(gui.getTabbedPane().getSelectedIndex()).setCharacterAttributes(i + parola.length(), gui.getDoc().get(gui.getTabbedPane().getSelectedIndex()).getLength() + 1, attrs, false);
+			i += parola.length();
+			i = tmp.indexOf(parola, i);
+		}
+	
+	}
+	
 	void saveFile(String fileName) {
 		try{
 			FileWriter w = new FileWriter(fileName);
-			gui.getTextArea().write(w);
+			gui.getActiveTextArea().write(w);
 			w.close();
 			Actions.setCourrentFile(fileName);
 			//gui.setTitle(Actions.getCourrentFile());
