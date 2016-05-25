@@ -8,14 +8,21 @@ import javax.swing.JMenuItem;
 import javax.swing.JToolBar;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyledDocument;
+
+import javafx.scene.layout.Border;
+
 import javax.swing.JButton;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
+
+
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.JLabel;
+import java.awt.GridLayout;
 
 public class GUI extends JFrame{
 	/**
@@ -28,8 +35,7 @@ public class GUI extends JFrame{
 	private java.util.List<StyledDocument> doc;
 	private java.util.List<Font> font;
 	private java.util.List<MutableAttributeSet> attrs;
-	
-	private JPanel panel;
+	private java.util.List<JTextField> linecount;
 	private JMenuBar menuBar;
 	private JMenu mnFile;
 	private JMenuItem mntmNuovo;
@@ -47,20 +53,20 @@ public class GUI extends JFrame{
 	private JButton btnSave;
 	private JButton btnCmd;
 	private JPanel panel_1;
+	
+
 	private JScrollPane scrollPane;
 	private JTabbedPane tabbedPane;
 	private static boolean changed = false;
 	
 	public GUI() {	
+		getContentPane().setLayout(null);
 		System.out.println("Controllare chiusure files");
 		
 		setVisible(true);
 		setSize(600, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		panel = new JPanel();
-		getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setLayout(null);
 		
 		menuBar = new JMenuBar();
 		menuBar.setBounds(1, 1, 278, 30);
@@ -116,31 +122,10 @@ public class GUI extends JFrame{
 		mnModifica_1.add(mntmSelezionaTutto_1);
 		
 		
-		/*mnModifica = new JMenu("Modifica");
-		mnModifica.add(actions.Cut);
-		mnModifica.add(actions.Copy);
-		mnModifica.add(actions.Paste);
-		mnModifica.getItem(0).setText("Taglia");
-		mnModifica.getItem(1).setText("Copia");
-		mnModifica.getItem(2).setText("Incolla");
-		menuBar.add(mnModifica);*/
-		/*mntmSalva = new JMenuItem("Salva");
-		mnFile.add(mntmSalva);
-		
-		mntmApri = new JMenuItem("Apri");
-		mnFile.add(mntmApri);
-		
-		
-		
-		mntmNewMenuItem = new JMenuItem("New menu item");
-		mnModifica.add(mntmNewMenuItem);
-		
-		mntmSelezionaTutto = new JMenuItem("Seleziona tutto");
-		mnModifica.add(mntmSelezionaTutto);*/
 		
 		toolBar = new JToolBar();
 		toolBar.setBounds(0, 0, 500, 25);
-		panel.add(toolBar);
+		getContentPane().add(toolBar);
 		
 		setBtnSave(new JButton("Save"));
 		getBtnSave().setEnabled(false);
@@ -150,21 +135,23 @@ public class GUI extends JFrame{
 		btnCmd = new JButton("CMD");
 		toolBar.add(btnCmd);
 		btnCmd.addActionListener(actions.openCmd);
-		
+				
 		panel_1 = new JPanel();
-		panel_1.setBounds(5, 30, 574, 364);
-		panel.add(panel_1);
+		panel_1.setBounds(25, 30, 549, 364);
+		getContentPane().add(panel_1, BorderLayout.WEST);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
-		scrollPane = new JScrollPane();
-		panel_1.add(scrollPane, BorderLayout.CENTER);
-		
 		setTabbedPane(new JTabbedPane(JTabbedPane.TOP));
-		scrollPane.setViewportView(getTabbedPane());
+		getTabbedPane().setSize(520, 360);
 		
-		JLabel lblVersion = new JLabel("Version 1.0 - Nicholas Possamai");
-		lblVersion.setBounds(15, 415, 274, 25);
-		panel.add(lblVersion);
+		panel_1.add(getTabbedPane());
+		//scrollPane = new JScrollPane();
+		
+		JLabel lblVersion = new JLabel("Version 1.0 - OurIDEProject");
+		lblVersion.setBounds(0, 0, 549, 14);
+		getContentPane().add(lblVersion);
+		validate();
+		repaint();
 		
 		
 		/*textAreas[0]= new JTextArea();
@@ -190,7 +177,14 @@ public class GUI extends JFrame{
 		setAttrs(new ArrayList<MutableAttributeSet>());
 		setDoc(new ArrayList<StyledDocument>());
 		setTextFont(new ArrayList<Font>());
+		setLinecount(new ArrayList<JTextField>());
 		
+	}
+	public JScrollPane getScrollPane() {
+		return scrollPane;
+	}
+	public void setScrollPane(JScrollPane scrollPane) {
+		this.scrollPane = scrollPane;
 	}
 	public JTextPane getActiveTextArea() {
 		return getTextAreas().get(getTabbedPane().getSelectedIndex());
@@ -267,6 +261,7 @@ public class GUI extends JFrame{
 
 	public void setTabbedPane(JTabbedPane tabbedPane) {
 		this.tabbedPane = tabbedPane;
+		panel_1.add(tabbedPane, BorderLayout.NORTH);
 	}
 
 	public JMenuItem getMntmSalvaConNome() {
@@ -301,9 +296,18 @@ public class GUI extends JFrame{
 		this.attrs = attrs;
 	}
 
+	public java.util.List<JTextField> getLinecount() {
+		return linecount;
+	}
+	
+	public void setLinecount(java.util.List<JTextField> linecount) {
+		this.linecount = linecount;
+	}
+
 	Moduli moduli = new Moduli(this);
 	Actions actions = new Actions(moduli);
 	
 	private JMenuItem mntmSelezionaTutto_1;
+	
 	
 }

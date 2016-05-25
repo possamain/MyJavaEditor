@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.text.StyleConstants;
 
@@ -56,33 +57,9 @@ public class Actions {
 			//String nomeNuovoFile = JOptionPane.showInputDialog("Nome file");
 			moduli.gui.getFiles().add(new File("Untitled"));
 			
-			moduli.gui.getTextAreas().add(new JTextPane());
-			moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).addKeyListener(colorWords);                                                                 
+			moduli.newTextArea();
 			
-			moduli.gui.getTextFont().add(new Font("Monospaced", Font.BOLD, 12));
-			//System.out.println(moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1));
-			//moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex())
-			moduli.gui.getDoc().add(moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).getStyledDocument());
-			//doc = textPane.getStyledDocument();
-			moduli.gui.getAttrs().add(moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).getInputAttributes());
-			//MutableAttributeSet attrs = textPane.getInputAttributes();
-			StyleConstants.setAlignment(moduli.gui.getAttrs().get(moduli.gui.getAttrs().size()-1), StyleConstants.ALIGN_LEFT);
-			moduli.gui.getDoc().get(moduli.gui.getDoc().size()-1).setParagraphAttributes(0, 0, moduli.gui.getAttrs().get(moduli.gui.getDoc().size()-1), true);
-			
-			StyleConstants.setFontFamily(moduli.gui.getAttrs().get(moduli.gui.getAttrs().size()-1), moduli.gui.getTextFont().get(moduli.gui.getDoc().size()-1).getFamily());
-			StyleConstants.setFontSize(moduli.gui.getAttrs().get(moduli.gui.getAttrs().size()-1), moduli.gui.getTextFont().get(moduli.gui.getDoc().size()-1).getSize());
-			StyleConstants.setBold(moduli.gui.getAttrs().get(moduli.gui.getAttrs().size()-1), true);
-			StyleConstants.setForeground(moduli.gui.getAttrs().get(moduli.gui.getAttrs().size()-1), Color.black);
-
-			moduli.gui.getDoc().get(moduli.gui.getDoc().size()-1).setCharacterAttributes(0, moduli.gui.getDoc().get(moduli.gui.getDoc().size()-1).getLength() + 1, moduli.gui.getAttrs().get(moduli.gui.getDoc().size()-1), false);
-			//doc.setCharacterAttributes(0, doc.getLength() + 1, attrs, false);
-			
-			//moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).setFont(new Font("Monospaced", Font.PLAIN, 12));
-			//moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).setVisible(true);
-			
-			//moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1).setText("public class "+nomeNuovoFile.substring(0, nomeNuovoFile.length()-5)+"{\n\tpublic static void main(String[] args){\n\n\t}\n}");
-			
-			if(moduli.gui.getTabbedPane().getTabCount()>=1){
+			/*if(moduli.gui.getTabbedPane().getTabCount()>=1){
 				for(int i = 0; i<moduli.gui.getTabbedPane().getTabCount(); i++)
 					if(moduli.gui.getTabbedPane().getTitleAt(i)==moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getName()&&moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getName()!="Untitled"){
 						moduli.gui.getTabbedPane().addTab(moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getName()+" - "+moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getPath(), null, moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1), null);
@@ -96,10 +73,10 @@ public class Actions {
 			}
 			else {
 				moduli.gui.getTabbedPane().addTab(moduli.gui.getFiles().get(moduli.gui.getFiles().size()-1).getName(), null, moduli.gui.getTextAreas().get(moduli.gui.getTextAreas().size()-1), null);
-			}
+			}*/
 			
 			//moduli.gui.mntmSalva.setEnabled(true);
-			moduli.gui.getMntmSalvaConNome().setEnabled(true);
+			
 		}
 	};
 	
@@ -231,8 +208,11 @@ public class Actions {
 		
 		@Override
 		public void keyTyped(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-			
+			JTextArea tmp = new JTextArea();
+			tmp.setText(moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex()).getText());
+			moduli.setLineCount(tmp.getLineCount());
+			//moduli.setLineCount(moduli.gui.getTextAreas().get(moduli.gui.getTabbedPane().getSelectedIndex()).getC);
+			//chiamare moduli.setLineCount(int numero_di_righe)
 		}
 		
 		@Override
